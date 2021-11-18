@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas class="zdog-canvas" width="960" height="960">
+</canvas>
+
+</body>
+</html>
+<script src="https://unpkg.com/zdog@1/dist/zdog.dist.min.js"></script>
+<!--<script src="zdog.dist.min.js"></script>-->
+<script>
+// Made with Zdog
+var yellow = '#ED0';
+var gold = '#eae0b9';
+var orange = '#d2ba4c';
+var garnet = '#8a866f';
+const TAU = Zdog.TAU;
+// create illo
+const illo = new Zdog.Illustration({
+  // set canvas with selector
+  element: '.zdog-canvas',
+  rotate: { x: -TAU/8 },
+});
+
+var burger = new Zdog.Anchor({
+  addTo: illo,
+  translate: { y: 24 },
+  rotate: { x: TAU/4 },
+});
+
+// top bun
+var topBun = new Zdog.Hemisphere({
+  addTo: burger,
+  diameter: 96*4,
+  translate: { z: 44*4 },
+  stroke: 24*4,
+  color: orange,
+  // backface: gold,
+});
+
+// cheese
+new Zdog.Rect({
+  addTo: burger,
+  width: 92*4,
+  height: 92*4,
+  translate: { z: 24*4 },
+  stroke: 16*4,
+  color: yellow,
+  fill: true,
+});
+
+// patty
+new Zdog.Ellipse({
+  addTo: burger,
+  diameter: 96*4,
+  stroke: 32*4,
+  color: garnet,
+  fill: true,
+});
+
+// bottom bun
+new Zdog.Cylinder({
+  addTo: burger,
+  diameter: topBun.diameter,
+  length: 16*4,
+  translate: { z: -36*4 },
+  stroke: topBun.stroke,
+  color: topBun.color,
+});
+
+var seedAnchor = new Zdog.Anchor({
+  addTo: topBun,
+});
+
+var seedZ = (( topBun.diameter + topBun.stroke ) / 2 + 1);
+// seed
+new Zdog.Shape({
+  addTo: seedAnchor,
+  path: [ { y: -3*4 }, { y: 3*4 } ],
+  translate: { z: seedZ },
+  stroke: 8*4,
+  color: gold,
+});
+
+seedAnchor.copyGraph({
+  rotate: { x: 0.6 },
+});
+seedAnchor.copyGraph({
+  rotate: { x: -0.6 },
+});
+seedAnchor.copyGraph({
+  rotate: { y: -0.5 },
+});
+seedAnchor.copyGraph({
+  rotate: { y: 0.5 },
+});
+
+function animate() {
+  // rotate illo each frame
+  illo.rotate.y += 0.03;
+  //illo.rotate.x += 0.01;
+  illo.updateRenderGraph();
+  // animate next frame
+  requestAnimationFrame( animate );
+}
+// start animation
+animate();
+
+// update & render
+illo.updateRenderGraph();
+</script>
